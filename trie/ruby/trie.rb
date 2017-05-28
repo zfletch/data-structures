@@ -1,11 +1,21 @@
+# Trie
+#
+# Example:
+#   trie = Trie.new
+#   trie.set("fruit", "apple")
+#   trie.set("fruit", "pear")
+#   trie.set("color", "blue")
+#
+#   trie.get("fruit") # => "pear"
+#   trie.get("color") # => "blue"
+#   trie.get("frui") # => nil
+
 class Trie
   def initialize
     @nodes = []
   end
 
   def set(key, value)
-    return self if key.empty?
-
     current_nodes = nodes
     node = nil
 
@@ -21,8 +31,6 @@ class Trie
   end
 
   def get(key)
-    return self if key.empty?
-
     current_nodes = nodes
     node = nil
 

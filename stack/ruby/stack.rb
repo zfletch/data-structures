@@ -1,3 +1,16 @@
+# Stack (or LIFO Queue)
+#
+# Example:
+#   stack = Stack.new
+#   stack.push "first"
+#   stack.push "second"
+#   stack.push "last"
+#
+#   stack.pop # => "last"
+#   stack.pop # => "second"
+#   stack.pop # => "first"
+#   stack.pop # => nil
+
 class Stack
   def initialize
     @first_node = nil

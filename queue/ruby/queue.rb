@@ -1,3 +1,16 @@
+# Stack (or FIFO Queue)
+#
+# Example:
+#   queue = Queue.new
+#   queue.unshift "first"
+#   queue.unshift "second"
+#   queue.unshift "last"
+#
+#   queue.shift # => "first"
+#   queue.shift # => "second"
+#   queue.shift # => "last"
+#   queue.shift # => nil
+
 class Queue
   def initialize
     @first_node = nil
