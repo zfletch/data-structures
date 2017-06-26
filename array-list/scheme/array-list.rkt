@@ -1,23 +1,34 @@
 #lang racket
 
-(provide make-array-list array-list-set array-list-get array-list-size)
+(provide make-array-list
+		 array-list-empty?
+		 array-list-length
+		 array-list-get
+		 array-list-set
+		 array-list-add)
 
 (define (make-array-list) (cons 0 (make-vector 10 0)))
 
+(define (array-list-empty? array-list)
+  (= (array-list-length array-list) 0))
+
+(define array-list-length car)
+
 (define (array-list-get array-list index)
-  (if (>= index (array-list-size array-list))
+  (if (>= index (array-list-length array-list))
     0
     (vector-ref (array-list-vector array-list) index)))
 
 (define (array-list-set array-list index value)
   (let* ((array (array-list-vector array-list))
-         (vector-size (vector-length array))
-         (size (max (+ index 1) (array-list-size array-list)))
-         (new-vector-size (if (> size vector-size) (* size 2) vector-size))
-         (new-vector (copy-vector array (make-vector new-vector-size 0))))
-    (begin (vector-set! new-vector index value) (cons size new-vector))))
+         (vector-length (vector-length array))
+         (length (max (+ index 1) (array-list-length array-list)))
+         (new-vector-length (if (> length vector-length) (* length 2) vector-length))
+         (new-vector (copy-vector array (make-vector new-vector-length 0))))
+    (begin (vector-set! new-vector index value) (cons length new-vector))))
 
-(define array-list-size car)
+(define (array-list-add array-list value)
+  (array-list-set array-list (array-list-length array-list) value))
 
 (define array-list-vector cdr)
 
@@ -29,8 +40,3 @@
     (begin
       (vector-set! large index (vector-ref small index))
       (copy-vector-helper small large (+ index 1)))))
-
-; (define array-list (make-array-list))
-; (array-list-set array-list 0 2)
-; (array-list-set (array-list-set array-list 5 3) 10 1)
-; (array-list-set (array-list-set array-list 5 3) 40 1)
