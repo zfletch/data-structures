@@ -1,0 +1,15 @@
+node_js:
+  - 8.0.0
+rvm:
+  - 2.4.1
+before_install:
+  - sudo add-apt-repository -y ppa:plt/racket
+  - sudo apt-get -qq update
+  - sudo apt-get install -y racket
+  - nvm install node
+  - npm install -g yarn
+install:
+  - bundle install
+  - yarn install
+script:
+  - ./test.sh
