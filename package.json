@@ -1,0 +1,11 @@
+{
+  "name": "data-structures",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "zfletch",
+  "license": "MIT",
+  "scripts": { "test": "jasmine" },
+  "dependencies": {
+    "jasmine": "^2.6.0"
+  }
+}
