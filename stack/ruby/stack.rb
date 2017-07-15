@@ -1,56 +1,47 @@
-# Stack (or LIFO Queue)
-#
-# Example:
-#   stack = Stack.new
-#   stack.push "first"
-#   stack.push "second"
-#   stack.push "last"
-#
-#   stack.pop # => "last"
-#   stack.pop # => "second"
-#   stack.pop # => "first"
-#   stack.pop # => nil
-
 class Stack
   def initialize
-    @first_node = nil
+    @head = nil
   end
 
-  def push(data)
-    @first_node = Node.new(data, first_node)
+  def empty?
+    head.nil?
+  end
+
+  def push(val)
+    @head = Node.new(val, head)
 
     self
   end
 
   def pop
-    return unless first_node
+    return if empty?
 
-    data = first_node.data
-    @first_node = first_node.next_node
+    val = head.val
+    @head = head.next_node
 
-    data
+    val
   end
 
-  def to_s
-    "/\\\n#{string}\\/"
+  def inspect
+    "/#{string}/"
   end
 
   private
 
-  attr_reader :first_node
+  attr_reader :head
 
-  def string(node = first_node)
+  def string(node = head)
     return "" unless node
 
-    "#{node.data}\n" << string(node.next_node)
+    node.next_node ? "#{node.val} " << string(node.next_node) : "#{node.val}"
   end
 
   class Node
     attr_accessor :next_node
-    attr_reader :data
+    attr_reader :val
 
-    def initialize(data, next_node = nil)
-      @data = data
+    def initialize(val, next_node = nil)
+      @val = val
       @next_node = next_node
     end
   end

@@ -1,24 +1,22 @@
 class Tree
-  def initialize
-    @root = nil
-  end
+  include Enumerable
 
-  def insert(number)
-    node = Node.new(number)
+  def insert(value)
+    node = Node.new(value)
 
-    if root
-      root.insert(node)
-    else
-      @root = node
-    end
+    empty? ? @root = node : root.insert(node)
 
     self
   end
 
-  def delete(number)
-    return unless root
+  def empty?
+    root.nil?
+  end
 
-    if root.value == number
+  def delete(value)
+    return if empty?
+
+    if root.value == value
       if root.left_child && root.right_child
         right_child = root.right_child
         @root = root.left_child
@@ -32,38 +30,27 @@ class Tree
         @root = nil
       end
 
-      number
+      value
     else
-      root.delete(number)
+      root.delete(value)
     end
   end
 
-  def find(number)
-    return unless root
+  def exists?(number)
+    return false unless root
 
-    root.find(number)
+    root.exists?(number)
   end
 
-  def inorder
+  def in_order
     return unless root
 
-    root.inorder { |value| yield value }
+    root.in_order { |value| yield value }
   end
-
-  def preorder
-    return unless root
-
-    root.preorder { |value| yield value }
-  end
-
-  def postorder
-    return unless root
-
-    root.postorder { |value| yield value }
-  end
+  alias_method :each, :in_order
 
   def inspect
-    "(#{root && root.string || ""})"
+    empty? ? "()" : root.string
   end
 
   private
@@ -87,14 +74,20 @@ class Tree
       end
     end
 
-    def find(number)
+    def exists?(number)
       if value == number
-        number
-      elsif value < number && left_child
-        left_child.find(number)
-      elsif value > number && right_child
-        right_child.find(number)
+        true
+      elsif number < value && left_child
+        left_child.exists?(number)
+      elsif number > value && right_child
+        right_child.exists?(number)
       end
+    end
+
+    def in_order
+      left_child.in_order { |value| yield value } if left_child
+      yield value
+      right_child.in_order { |value| yield value } if right_child
     end
 
     def delete(number)
@@ -139,30 +132,11 @@ class Tree
       end
     end
 
-    def inorder
-      left_child.inorder { |value| yield value } if left_child
-      yield value
-      right_child.inorder { |value| yield value } if right_child
-    end
+    def string
+      left_string = left_child && left_child.string
+      right_string = right_child && right_child.string
 
-    def preorder
-      yield value
-      left_child.preorder { |value| yield value } if left_child
-      right_child.preorder { |value| yield value } if right_child
-    end
-
-    def postorder
-      left_child.postorder { |value| yield value } if left_child
-      right_child.postorder { |value| yield value } if right_child
-      yield value
-    end
-
-    def string(count: 0)
-      left_string = left_child && left_child.string(count: count + 1) || ""
-      right_string = right_child && right_child.string(count: count + 1) || ""
-      space = "  " * (count + 1)
-
-      "#{value}\n#{space}(#{left_string})\n#{space}(#{right_string})"
+      "(#{[left_string, value, right_string].compact.join(" ")})"
     end
   end
 end
