@@ -1,7 +1,7 @@
 #lang racket
  
 (require rackunit
-         "array-list.rkt")
+         array-list/array-list)
 
 (let ((array-list (make-array-list)))
   (check-equal? (array-list-empty? array-list) #t "Array list should be empty")

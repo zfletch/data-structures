@@ -4,7 +4,7 @@
   "main": "index.js",
   "author": "zfletch",
   "license": "MIT",
-  "scripts": { "test": "jasmine" },
+  "scripts": { "test": "NODE_PATH=lib jasmine" },
   "dependencies": {
     "jasmine": "^2.6.0"
   }
