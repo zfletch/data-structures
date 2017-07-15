@@ -1,11 +1,11 @@
 #lang racket
 
 (provide make-array-list
-		 array-list-empty?
-		 array-list-length
-		 array-list-get
-		 array-list-set
-		 array-list-add)
+         array-list-empty?
+         array-list-length
+         array-list-get
+         array-list-set
+         array-list-add)
 
 (define (make-array-list) (cons 0 (make-vector 10 0)))
 
