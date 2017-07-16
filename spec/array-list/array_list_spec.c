@@ -1,30 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include "support/utils.h"
 #include "array-list/array_list.h"
-
-int status = 0;
-
-void test_int(int a, int b, char *message)
-{
-	if (a == b) {
-		printf(".");
-		return;
-	}
-
-	printf("\n%s (Expected %d got %d)\n", message, b, a);
-	status = 1;
-}
-
-void test_bool(bool a, bool b, char *message)
-{
-	if (a == b) {
-		printf(".");
-		return;
-	}
-
-	printf("\n%s (Expected %d got %d)\n", message, b, a);
-	status = 1;
-}
 
 int main()
 {
@@ -52,5 +29,5 @@ int main()
 
 	printf("\n");
 
-	return status;
+	return test_status;
 }
