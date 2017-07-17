@@ -24,7 +24,13 @@ ArrayList *array_list_create()
 	return list;
 }
 
-bool array_list_empty(ArrayList *list)
+void array_list_destroy(ArrayList *list)
+{
+	free(list->array);
+	free(list);
+}
+
+bool array_list_is_empty(ArrayList *list)
 {
 	return !list->index;
 }
@@ -61,7 +67,7 @@ ArrayList *array_list_set(ArrayList *list, size_t index, int value)
 	return list;
 }
 
-ArrayList *array_list_add(ArrayList *list, int value)
+ArrayList *array_list_push(ArrayList *list, int value)
 {
 	return array_list_set(list, list->index, value);
 }

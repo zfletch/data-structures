@@ -6,6 +6,7 @@ before_install:
   - sudo add-apt-repository -y ppa:plt/racket
   - sudo apt-get -qq update
   - sudo apt-get install -y racket
+  - sudo apt-get install valgrind
   - nvm install node
   - npm install -g yarn
 install:

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 gcc -Wall \
   -I lib \
@@ -8,7 +8,23 @@ gcc -Wall \
   spec/support/utils.c \
   -o _test.out
 
-./_test.out || STATUS=$?
+echo "$1"
+
+if [[ $OSTYPE == darwin16 ]]; then
+  valgrind \
+    --quiet \
+    --suppressions=spec/support/valgrind/osx-10.12.5.supp \
+    --error-exitcode=2 \
+    --leak-check=yes \
+    ./_test.out || STATUS=$?
+else
+  valgrind \
+    --quiet \
+    --error-exitcode=2 \
+    --leak-check=yes \
+    ./_test.out || STATUS=$?
+fi
+
 rm ./_test.out
 
 exit $STATUS
