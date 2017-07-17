@@ -1,0 +1,29 @@
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Param
+   msg->desc.port.name
+   fun:mach_msg_trap
+   fun:mach_msg
+   fun:task_set_special_port
+   fun:_os_trace_create_debug_control_port
+   fun:_libtrace_init
+   fun:libSystem_initializer
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Param
+   msg->desc.port.name
+   fun:mach_msg_trap
+   fun:mach_msg
+   fun:task_set_special_port
+   fun:_os_trace_create_debug_control_port
+   fun:_libtrace_init
+   fun:libSystem_initializer
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:map_images_nolock
+}
