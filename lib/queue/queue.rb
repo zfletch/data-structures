@@ -1,64 +1,55 @@
-# Stack (or FIFO Queue)
-#
-# Example:
-#   queue = Queue.new
-#   queue.unshift "first"
-#   queue.unshift "second"
-#   queue.unshift "last"
-#
-#   queue.shift # => "first"
-#   queue.shift # => "second"
-#   queue.shift # => "last"
-#   queue.shift # => nil
-
 class Queue
   def initialize
-    @first_node = nil
-    @last_node = nil
+    @head = nil
+    @tail = nil
   end
 
-  def unshift(data)
-    node = Node.new(data)
-    last_node.next_node = node if last_node
-    @first_node = node unless first_node
-    @last_node = node
+  def empty?
+    head.nil?
+  end
+
+  def push(val)
+    node = Node.new(val)
+
+    if empty?
+      @head = @tail = node
+    else
+      @tail = tail.next_node = node
+    end
 
     self
   end
 
   def shift
-    return unless first_node
+    return if empty?
 
-    data = first_node.data
-    if first_node == last_node
-      @first_node = @last_node = nil
-    else
-      @first_node = first_node.next_node
-    end
+    val = head.val
+    @head = head.next_node
 
-    data
+    val
   end
 
-  def to_s
-    "/\\\n#{string}\\/"
+  def inspect
+    "\\#{string}\\"
   end
 
   private
 
-  attr_reader :first_node, :last_node
+  attr_reader :head, :tail
 
-  def string(node = first_node)
+  def string(node = head)
     return "" unless node
 
-    "#{node.data}\n" << string(node.next_node)
+    node.next_node ? "#{node.val} " << string(node.next_node) : "#{node.val}"
   end
 
   class Node
     attr_accessor :next_node
-    attr_reader :data
+    attr_reader :val
 
-    def initialize(data)
-      @data = data
+    def initialize(val)
+      @val = val
+      @next_node = nil
     end
   end
 end
