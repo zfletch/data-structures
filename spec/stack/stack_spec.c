@@ -5,7 +5,7 @@
 
 void stack_is_empty_test()
 {
-	Stack *stack = stack_create(10);
+	Stack *stack = stack_create();
 
 	test_bool(stack_is_empty(stack), true, "Stack is empty");
 	stack_push(stack, 5);
@@ -18,10 +18,10 @@ void stack_pop_test()
 {
 	int ii;
 
-	Stack *stack = stack_create(10);
+	Stack *stack = stack_create();
 
-	for (ii = 0; ii < 10; ii++) stack_push(stack, ii);
-	for (ii = 9; ii >= 0; ii--) test_int(stack_pop(stack), ii, "Pops from stack");
+	for (ii = 0; ii < 100; ii++) stack_push(stack, ii);
+	for (ii = 99; ii >= 0; ii--) test_int(stack_pop(stack), ii, "Pops from stack");
 
 	test_int(stack_pop(stack), 0, "Pops from empty stack");
 
@@ -30,11 +30,11 @@ void stack_pop_test()
 
 void stack_push_test()
 {
-	Stack *stack = stack_create(1);
+	Stack *stack = stack_create();
 
-	test_bool(stack_push(stack, 1), true, "Can push to stack with space");
-	test_bool(stack_push(stack, 1), false, "Cannot push to full stack");
-	test_bool(stack_is_empty(stack), false, "After pushing stack is not empty");
+	stack_push(stack_push(stack, 1), 2);
+	test_int(stack_pop(stack), 2, "Pops from stack");
+	test_int(stack_pop(stack), 1, "Pops from stack");
 
 	stack_destroy(stack);
 }
@@ -45,5 +45,6 @@ int main()
 	stack_pop_test();
 	stack_push_test();
 
+	printf("\n");
 	return test_status;
 }
