@@ -1,47 +1,63 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "stack.h"
+
+typedef struct Node {
+	struct Node *next;
+	int value;
+} Node;
 
 typedef struct Stack {
-	size_t index;
-	size_t size;
-	int *values;
+	Node *head;
 } Stack;
 
-Stack *stack_create(size_t size)
+Stack *stack_create()
 {
 	Stack *stack = malloc(sizeof(Stack));
-	int *values = malloc(size * sizeof(int));
 
-	stack->index = 0;
-	stack->size = size;
-	stack->values = values;
+	stack->head = NULL;
 
 	return stack;
 }
 
 void stack_destroy(Stack *stack)
 {
-	free(stack->values);
+	Node *temp;
+
+	while (!stack_is_empty(stack)) {
+		temp = stack->head->next;
+		free(stack->head);
+		stack->head = temp;
+	}
+
 	free(stack);
 }
 
 bool stack_is_empty(Stack *stack)
 {
-	return !stack->index;
+	return stack->head == NULL;
 }
 
-bool stack_push(Stack *stack, int value)
+Stack *stack_push(Stack *stack, int value)
 {
-	if (stack->index == stack->size) return false;
+	Node *head = malloc(sizeof(Node));
 
-	stack->values[stack->index++] = value;
-	return true;
+	head->value = value;
+	head->next = stack->head;
+	stack->head = head;
+
+	return stack;
 }
 
 int stack_pop(Stack *stack)
 {
 	if (stack_is_empty(stack)) return 0;
 
-	return stack->values[--stack->index];
+	int value = stack->head->value;
+	Node *temp = stack->head;
+	stack->head = temp->next;
+	free(temp);
+
+	return value;
 }
