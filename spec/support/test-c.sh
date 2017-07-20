@@ -1,6 +1,9 @@
 #!/bin/bash
 
-gcc -Wall \
+gcc \
+  -Wall \
+  -Wno-parentheses \
+  -g \
   -I lib \
   -I spec \
   "$1" \

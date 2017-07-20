@@ -4,11 +4,11 @@
 
 (define (make-stack) '())
 
-(define (stack-empty? stack) (equal? stack '()))
+(define (stack-empty? stack) (equal? stack (make-stack)))
 
 (define (stack-pop fn stack)
   (if (stack-empty? stack)
-    (fn '() '())
+    (fn '() (make-stack))
     (fn (car stack) (cdr stack))))
 
 (define (stack-push val stack) (cons val stack))

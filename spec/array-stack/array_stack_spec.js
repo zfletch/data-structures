@@ -4,7 +4,7 @@ describe(ArrayStack, function () {
   beforeEach(function () {
     this.stack = new ArrayStack();
   });
-  
+
   describe("isEmpty", function () {
     it("is empty", function () {
       expect(this.stack.isEmpty()).toBeTruthy();

@@ -16,28 +16,13 @@ class BinaryTree
   def delete(value)
     return if empty?
 
-    if root.value == value
-      if root.left_child && root.right_child
-        right_child = root.right_child
-        @root = root.left_child
+    @root, val = *@root.delete_and_value(value)
 
-        root.insert(right_child)
-      elsif root.left_child
-        @root = root.left_child
-      elsif root.right_child
-        @root = root.right_child
-      else
-        @root = nil
-      end
-
-      value
-    else
-      root.delete(value)
-    end
+    val
   end
 
   def exists?(number)
-    return false unless root
+    return false if empty?
 
     root.exists?(number)
   end
@@ -77,10 +62,10 @@ class BinaryTree
     def exists?(number)
       if value == number
         true
-      elsif number < value && left_child
-        left_child.exists?(number)
-      elsif number > value && right_child
-        right_child.exists?(number)
+      elsif number < value
+        left_child ? left_child.exists?(number) : nil
+      elsif number > value
+        right_child ? right_child.exists?(number) : nil
       end
     end
 
@@ -90,53 +75,51 @@ class BinaryTree
       right_child.in_order { |value| yield value } if right_child
     end
 
-    def delete(number)
-      if number < value
-        if left_child && left_child.value == number
-          if left_child.left_child && left_child.right_child
-            left_childs_right_child = left_child.right_child
-            @left_child = left_child.left_child
-
-            left_child.insert(left_childs_right_child)
-          elsif left_child.left_child
-            @left_child = left_child.left_child
-          elsif left_child.right_child
-            @left_child = left_child.right_child
-          else
-            @left_child = nil
-          end
-
-          number
-        elsif left_child
-          left_child.delete(number)
-        end
-      else
-        if right_child && right_child.value == number
-          if right_child.left_child && right_child.right_child
-            right_childs_left_child = right_child.left_child
-            @right_child = right_child.right_child
-
-            right_child.insert(right_childs_left_child)
-          elsif right_child.left_child
-            @right_child = right_child.left_child
-          elsif right_child.right_child
-            @right_child = right_child.right_child
-          else
-            @right_child = nil
-          end
-
-          number
-        elsif right_child
-          right_child.delete(number)
-        end
-      end
-    end
-
     def string
       left_string = left_child && left_child.string
       right_string = right_child && right_child.string
 
       "(#{[left_string, value, right_string].compact.join(" ")})"
+    end
+
+    def delete_and_value(number)
+      if number < value
+        @left_child, val = *(left_child ? left_child.delete_and_value(number) : [nil, nil])
+
+        [self, val]
+      elsif number > value
+        @right_child, val = *(right_child ? right_child.delete_and_value(number) : [nil, nil])
+
+        [self, val]
+      else
+        tree_without_node_and_value
+      end
+    end
+
+    protected
+
+    def minimum
+      left_child ? left_child.minimum : self
+    end
+
+    private
+
+    def tree_without_node_and_value
+      if !left_child && !right_child
+        [nil, value]
+      elsif right_child && !left_child
+        [right_child, value]
+      elsif left_child && !right_child
+        [left_child, value]
+      else
+        return_value = value
+        successor = right_child.minimum
+
+        @value = successor.value
+        @right_child, _ = @right_child.delete_and_value(value)
+
+        [self, return_value]
+      end
     end
   end
 end

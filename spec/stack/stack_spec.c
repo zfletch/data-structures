@@ -3,7 +3,7 @@
 #include "support/utils.h"
 #include "stack/stack.h"
 
-void stack_is_empty_test()
+static void stack_is_empty_test()
 {
 	Stack *stack = stack_create();
 
@@ -14,7 +14,7 @@ void stack_is_empty_test()
 	stack_destroy(stack);
 }
 
-void stack_pop_test()
+static void stack_pop_test()
 {
 	int ii;
 
@@ -28,7 +28,7 @@ void stack_pop_test()
 	stack_destroy(stack);
 }
 
-void stack_push_test()
+static void stack_push_test()
 {
 	Stack *stack = stack_create();
 
