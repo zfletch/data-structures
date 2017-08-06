@@ -3,7 +3,7 @@
 #include "support/utils.h"
 #include "array-list/array_list.h"
 
-void array_list_is_empty_test()
+static void array_list_is_empty_test()
 {
 	ArrayList *list = array_list_create();
 
@@ -14,7 +14,7 @@ void array_list_is_empty_test()
 	array_list_destroy(list);
 }
 
-void array_list_length_test()
+static void array_list_length_test()
 {
 	ArrayList *list = array_list_create();
 
@@ -27,7 +27,7 @@ void array_list_length_test()
 	array_list_destroy(list);
 }
 
-void array_list_get_test()
+static void array_list_get_test()
 {
 	ArrayList *list = array_list_create();
 
@@ -43,7 +43,7 @@ void array_list_get_test()
 	array_list_destroy(list);
 }
 
-void array_list_set_test()
+static void array_list_set_test()
 {
 	ArrayList *list = array_list_create();
 
@@ -53,7 +53,7 @@ void array_list_set_test()
 	array_list_destroy(list);
 }
 
-void array_list_push_test()
+static void array_list_push_test()
 {
 	ArrayList *list = array_list_create();
 

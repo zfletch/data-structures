@@ -36,7 +36,7 @@ void stack_destroy(Stack *stack)
 
 bool stack_is_empty(Stack *stack)
 {
-	return stack->head == NULL;
+	return !stack->head;
 }
 
 Stack *stack_push(Stack *stack, int value)

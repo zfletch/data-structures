@@ -14,14 +14,27 @@ void array_stack_is_empty_test()
 	array_stack_destroy(stack);
 }
 
-void array_stack_pop_test()
+void array_stack_is_full_test()
 {
-	int ii;
-
+	int value;
 	ArrayStack *stack = array_stack_create(10);
 
-	for (ii = 0; ii < 10; ii++) array_stack_push(stack, ii);
-	for (ii = 9; ii >= 0; ii--) test_int(array_stack_pop(stack), ii, "Pops from stack");
+	for (value = 0; value < 10; value++) {
+		test_bool(array_stack_is_full(stack), false, "ArrayStack is not full");
+		array_stack_push(stack, value);
+	}
+	test_bool(array_stack_is_full(stack), true, "ArrayStack is full");
+
+	array_stack_destroy(stack);
+}
+
+void array_stack_pop_test()
+{
+	int value;
+	ArrayStack *stack = array_stack_create(10);
+
+	for (value = 0; value < 10; value++) array_stack_push(stack, value);
+	for (value = 9; value >= 0; value--) test_int(array_stack_pop(stack), value, "Pops from stack");
 
 	test_int(array_stack_pop(stack), 0, "Pops from empty stack");
 
@@ -42,6 +55,7 @@ void array_stack_push_test()
 int main()
 {
 	array_stack_is_empty_test();
+	array_stack_is_full_test();
 	array_stack_pop_test();
 	array_stack_push_test();
 

@@ -32,9 +32,14 @@ bool array_stack_is_empty(ArrayStack *stack)
 	return !stack->index;
 }
 
+bool array_stack_is_full(ArrayStack *stack)
+{
+	return stack->index == stack->size;
+}
+
 bool array_stack_push(ArrayStack *stack, int value)
 {
-	if (stack->index == stack->size) return false;
+	if (array_stack_is_full(stack)) return false;
 
 	stack->values[stack->index++] = value;
 	return true;

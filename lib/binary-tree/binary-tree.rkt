@@ -1,59 +1,66 @@
 #lang racket
 
-(provide create insert exists? delete in-order pre-order post-order)
+(provide make-binary-tree
+         binary-tree-empty?
+         binary-tree-exists?
+         binary-tree-insert
+         binary-tree-delete
+         binary-tree-in-order)
 
-(define (create) '())
+(define (make-binary-tree) '())
 
-(define (insert tree value) (insert-node tree (list value '() '())))
+(define (make-node value) (list value (make-binary-tree) (make-binary-tree)))
 
-(define (exists? tree value)
-  (if (null? tree)
+(define (binary-tree-empty? tree) (equal? tree (make-binary-tree)))
+
+(define (binary-tree-exists? value tree)
+  (if (binary-tree-empty? tree)
     #f
     (let ((tree-value (car tree)) (left (cadr tree)) (right (caddr tree)))
       (cond
-        ((< value tree-value) (exists? left value))
-        ((> value tree-value) (exists? right value))
+        ((< value tree-value) (binary-tree-exists? value left))
+        ((> value tree-value) (binary-tree-exists? value right))
         (else #t)))))
 
-(define (delete tree value)
-  (if (null? tree)
-    '()
-    (let ((tree-value (car tree)) (left (cadr tree)) (right (caddr tree)))
-      (cond
-        ((< value tree-value) (list tree-value (delete left value) right))
-        ((> value tree-value) (list tree-value left (delete right value)))
-        (else (insert-node left right))))))
+(define (binary-tree-insert value tree) (insert-helper (make-node value) tree))
 
-(define (in-order tree) (in-order-helper tree '()))
-(define (pre-order tree) (pre-order-helper tree '()))
-(define (post-order tree) (post-order-helper tree '()))
-
-; helper functions
-
-(define (insert-node tree node)
+(define (insert-helper node tree)
   (cond
-    ((null? tree) node)
-    ((null? node) tree)
+    ((binary-tree-empty? tree) node)
+    ((binary-tree-empty? node) tree)
     (else
       (let ((value (car node)) (tree-value (car tree)) (left (cadr tree)) (right (caddr tree)))
         (if (< value tree-value)
-          (list tree-value (insert-node left node) right)
-          (list tree-value left (insert-node right node)))))))
+          (list tree-value (insert-helper node left) right)
+          (list tree-value left (insert-helper node right)))))))
 
-(define (in-order-helper tree accumulator)
-  (if (null? tree)
-    accumulator
-    (let ((value (car tree)) (left (cadr tree)) (right (caddr tree)))
-      (in-order-helper right (cons value (in-order-helper left accumulator))))))
+(define (minimum-node tree)
+    (let ((tree-value (car tree)) (left (cadr tree)))
+      (cond
+        ((binary-tree-empty? left) tree)
+        (else (minimum-node left)))))
 
-(define (pre-order-helper tree accumulator)
-  (if (null? tree)
-    accumulator
-    (let ((value (car tree)) (left (cadr tree)) (right (caddr tree)))
-      (pre-order-helper right (in-order-helper left (cons value accumulator))))))
+(define (binary-tree-delete value tree)
+  (if (binary-tree-empty? tree)
+    tree
+    (let ((tree-value (car tree)) (left (cadr tree)) (right (caddr tree)))
+      (cond
+        ((< value tree-value) (list tree-value (binary-tree-delete value left) right))
+        ((> value tree-value) (list tree-value left (binary-tree-delete value right)))
+        ((binary-tree-empty? left) right)
+        ((binary-tree-empty? right) left)
+        (else
+          (let* ((minimum (minimum-node right)) (minimum-value (car minimum)))
+            (list minimum-value left (binary-tree-delete minimum-value right))))))))
 
-(define (post-order-helper tree accumulator)
-  (if (null? tree)
-    accumulator
-    (let ((value (car tree)) (left (cadr tree)) (right (caddr tree)))
-      (cons value (post-order-helper right (post-order-helper left accumulator))))))
+(define (binary-tree-in-order fn tree)
+  (binary-tree-in-order-helper fn tree '()))
+
+(define (binary-tree-in-order-helper fn tree lst)
+  (if (binary-tree-empty? tree)
+    lst
+    (let ((tree-value (car tree)) (left (cadr tree)) (right (caddr tree)))
+      (binary-tree-in-order-helper
+        fn
+        left
+        (cons (fn tree-value) (binary-tree-in-order-helper fn right lst))))))
