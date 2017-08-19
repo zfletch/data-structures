@@ -6,6 +6,7 @@ PLTCOLLECTS=":$(pwd)/lib" raco test spec/ || STATUS=$?
 while read line; do
   ./spec/support/test-c.sh "$line" || STATUS=$?
 done < <(find spec -name '*_spec.c')
+./spec/support/haskell.rb || STATUS=$?
 
 echo $STATUS
 exit $STATUS

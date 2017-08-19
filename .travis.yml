@@ -6,11 +6,13 @@ before_install:
   - sudo add-apt-repository -y ppa:plt/racket
   - sudo apt-get -qq update
   - sudo apt-get install -y racket
-  - sudo apt-get install valgrind
+  - sudo apt-get install -y valgrind
+  - sudo curl -sSL https://get.haskellstack.org/ | sh
   - nvm install node
   - npm install -g yarn
 install:
   - bundle install
   - yarn install
+  - stack setup
 script:
   - ./test.sh
