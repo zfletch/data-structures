@@ -34,6 +34,11 @@ case "$1" in
     shift
     ./spec/support/haskell.rb "$@" || STATUS=$?
     ;;
+  reset)
+    echo "Deleting temporary files and directories"
+    rm -r .haskell
+    exit 1
+    ;;
   '')
     bundle exec rspec || STATUS=$?
 
@@ -48,15 +53,15 @@ case "$1" in
     ./spec/support/haskell.rb || STATUS=$?
     ;;
   *)
-    echo "Unrecognized language: $1"
+    echo "Unrecognized command: $1"
     exit 1
     ;;
 esac
 
 if [[ -z $STATUS ]]; then
-  echo "Test passed!"
+  echo "Tests passed!"
 else
-  echo "Test failed with status: $STATUS"
+  echo "Tests failed with status: $STATUS"
 fi
 
 exit $STATUS
