@@ -17,8 +17,8 @@ spec = do
 
   describe "head" $ do
     it "gets the head" $ do
-      let stack = Stack.cons 1 Stack.mkStack
-      Stack.head stack == Just 1
+      let stack = Stack.cons 2 $ Stack.cons 1 Stack.mkStack
+      Stack.head stack == Just 2
 
     it "returns nothing for an empty stack" $ do
       let stack = Stack.mkStack :: Stack.Stack Int

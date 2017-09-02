@@ -10,12 +10,11 @@ maintainer:          example@example.com
 copyright:           2017 Author name here
 category:            Web
 build-type:          Simple
-extra-source-files:  README.md
 cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Stack
+  exposed-modules:     Stack, Queue
   build-depends:       base >= 4.7 && < 5
   ghc-options:         -Wall
   default-language:    Haskell2010
