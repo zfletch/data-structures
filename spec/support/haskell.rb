@@ -19,11 +19,11 @@ file_map = {
   "LICENSE" => "LICENSE",
 }
 
-FileUtils.rm_r(root) if File.exists?(root)
-Dir.mkdir(root)
+Dir.mkdir(root) unless File.exists?(root)
 
 dir_map.each do |from, to|
-  Dir.mkdir("#{root}/#{to}")
+  dir = "#{root}/#{to}"
+  Dir.mkdir(dir) unless File.exists?(dir)
 
   Dir.glob("./#{from}/**/*.hs").each do |file|
     filename = file.split("/").last
@@ -35,4 +35,17 @@ file_map.each do |from, to|
   FileUtils.cp from, "#{root}/#{to}"
 end
 
-exec "cd #{root}; stack test"
+
+script_head = "cd #{root}"
+script_body = "stack test || STATUS=$?"
+script_tail = "exit $STATUS"
+
+if ARGV.length > -0
+  script_body = ARGV.map do |arg|
+    pattern = arg.gsub(%r~^.*/~, '').chomp('Spec.hs')
+
+    %Q~stack test --test-arguments '-m "#{pattern}"' || STATUS=$?~
+  end.join("\n")
+end
+
+exec [script_head, script_body, script_tail].join("\n")
