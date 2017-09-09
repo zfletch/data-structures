@@ -6,23 +6,20 @@ mkQueue :: Queue a
 mkQueue = Queue [] []
 
 null :: Queue a -> Bool
-null (Queue [] []) = True
+null (Queue [] _) = True
 null _ = False
 
 head :: Queue a -> Maybe a
-head (Queue [] (h:_)) = Just h
-head q
-  | Queue.null q = Nothing
-  | otherwise = Queue.head $ pour q
+head (Queue (h:_) _) = Just h
+head _ = Nothing
 
 tail :: Queue a -> Queue a
-tail (Queue [] (_:t)) = Queue [] t
-tail q
-  | Queue.null q = mkQueue
-  | otherwise = Queue.tail $ pour q
+tail (Queue (_:t) r) = checkf $ Queue t r
+tail _ = mkQueue
 
 snoc :: a -> Queue a -> Queue a
-snoc a (Queue l r) = Queue (a : l) r
+snoc a (Queue l r) = checkf $ Queue l (a:r)
 
-pour :: Queue a -> Queue a
-pour (Queue l r) = Queue [] (reverse l ++ r)
+checkf :: Queue a -> Queue a
+checkf (Queue [] r) = Queue (reverse r) []
+checkf q = q
