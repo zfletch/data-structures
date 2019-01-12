@@ -1,35 +1,23 @@
 class CircularBuffer
-  def initialize(size)
-    @size = size += 1
-    @buffer = [0] * size
-    @buffer_start = 0
-    @buffer_end = 0
+  def initialize(capacity)
+    @capacity = capacity
+    @buffer = [0] * capacity
+    @read = 0
+    @write = 0
   end
 
   def enqueue(num)
-    return if full?
-
-    buffer[buffer_end] = num
-    @buffer_end = inc(buffer_end)
+    buffer[write] = num
+    @write = inc(write)
 
     self
   end
 
   def dequeue
-    return if empty?
+    result = buffer[read]
+    @read = inc(read)
 
-    num = buffer[buffer_start]
-    @buffer_start = inc(buffer_start)
-
-    num
-  end
-
-  def empty?
-    buffer_start == buffer_end
-  end
-
-  def full?
-    inc(buffer_end) == buffer_start
+    result
   end
 
   def inspect
@@ -38,13 +26,10 @@ class CircularBuffer
 
   private
 
-  attr_reader :size, :buffer, :buffer_start, :buffer_end
+  attr_reader :capacity, :buffer, :read, :write
 
   def inc(index)
-    index += 1
-    index = 0 if index == size
-
-    index
+    (index + 1) % capacity
   end
 
   def string
